@@ -19,5 +19,5 @@ else
     exit 0
 fi
 
-printenv
+echo $WORKFLOW_FILE
 cp $WORKFLOW_FILE .circleci/workflows/selected_workflow.yml

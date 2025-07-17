@@ -24,4 +24,4 @@ jobs:
           name: printenv
           command: printenv
       - continuation/continue:
-          configuration_path: .circleci/scripts/selected_workflow.yml
+          configuration_path: .circleci/workflows/selected_workflow.yml
