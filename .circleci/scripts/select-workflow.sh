@@ -1,12 +1,8 @@
 #!/bin/bash
 
 set -e
-BASE_BRANCH="$1"
-HEAD_BRANCH="$2"
 
-echo $BASE_BRANCH
-echo $HEAD_BRANCH
-
+echo ${<< pipeline.event.github.pull_request.head.ref >>}
 echo "Branch: $CIRCLE_BRANCH"
 
 BRANCH_NAME="$CIRCLE_BRANCH"

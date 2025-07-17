@@ -8,17 +8,7 @@ orbs:
 workflows:
   setup:
     jobs:
-      - determine-workflow:
-          base_branch: << pipeline.parameters.base_branch >>
-          head_branch: << pipeline.parameters.head_branch >>
-
-parameters:
-  base_branch:
-    type: string
-    default: ""
-  head_branch:
-    type: string
-    default: ""
+      - determine-workflow
 
 jobs:
   determine-workflow:
@@ -29,8 +19,7 @@ jobs:
       - checkout
       - run:
           name: Determine workflow based on branch
-          command: .circleci/scripts/select-workflow.sh "<< parameters.base_branch >>" "<< parameters.head_branch >>"
-
+          command: .circleci/scripts/select-workflow.sh
       - run:
           name: printenv
           command: printenv
