@@ -10,6 +10,7 @@ env: &env
 defaults: &defaults
   docker:
     - image: cimg/base:2023.03
+  resource_class: small
   <<: *env
 
 install_tofu: &install_tofu
@@ -29,8 +30,9 @@ install_gcp: &install_gcp
 configure_gcp: &configure_gcp
   name: Configure gcp-cli
   command: |
+    pwd
     echo $DEV_GCLOUD_SERVICE_KEY > ${HOME}/gcloud-service-key.json
-    echo 'export GOOGLE APPLICATION_CREDENTIALS=${HOME}/gcloud-service-key.json' >> $BASH_ENV
+    echo 'export GOOGLE APPLICATION_CREDENTIALS=/home/circleci/gcloud-service-key.json' >> $BASH_ENV
 
 jobs:
   setup:
