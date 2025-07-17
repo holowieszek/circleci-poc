@@ -15,13 +15,7 @@ defaults: &defaults
 
 install_tofu: &install_tofu
   name: Install OpenTofu
-  command: |
-    curl -L "https://github.com/opentofu/opentofu/releases/download/v${TOFU_VERSION}/tofu_${TOFU_VERSION}_linux_amd64.zip" -o tofu.zip
-    unzip -o tofu.zip
-    sudo install -m 0755 tofu /usr/local/bin/tofu
-    rm -rf tofu
-    rm -rf tofu.zip
-    tofu --version
+  command: chmod +x .circleci/scripts/install-tofu.sh
 
 install_gcp: &install_gcp
   gcp-cli/setup:
