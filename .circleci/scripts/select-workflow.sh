@@ -2,7 +2,6 @@
 
 set -e
 
-#echo ${<< pipeline.event.github.pull_request.head.ref >>}
 echo "Branch: $CIRCLE_BRANCH"
 
 BRANCH_NAME="$CIRCLE_BRANCH"
@@ -20,5 +19,4 @@ else
     exit 0
 fi
 
-echo $WORKFLOW_FILE
 cp $WORKFLOW_FILE .circleci/workflows/selected_workflow.yml
