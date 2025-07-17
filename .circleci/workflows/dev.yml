@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  gcp-cli: circleci/gcp-cli@3.3.1
+
 env: &env
   environment:
     TOFU_VERSION: 1.8.0
@@ -40,6 +43,8 @@ jobs:
           at: /home/circleci
       - run:
           <<: *install_tofu
+      - run:
+          command: gcloud --version
       - run: |
           tofu --version
           echo "build"
