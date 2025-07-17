@@ -7,9 +7,6 @@ orbs:
 
 workflows:
   setup:
-    when:
-      and:
-        - equal: [push, << pipeline.event.name >>]
     jobs:
       - determine-workflow
 
@@ -17,6 +14,10 @@ jobs:
   determine-workflow:
     docker:
       - image: cimg/base:stable
+
+    environment:
+      CIRCLE_PULL_REQUEST_BASE_BRANCH: << pipeline.event.github.pull_request.base.ref >><<^ pipeline.event.github.pull_request.base.ref >>NO_PR<</ pipeline.event.github.pull_request.base.ref >>
+      CIRCLE_PULL_REQUEST_HEAD_BRANCH: << pipeline.event.github.pull_request.head.ref >><<^ pipeline.event.github.pull_request.head.ref >>NO_PR<</ pipeline.event.github.pull_request.head.ref >>
 
     steps:
       - checkout
