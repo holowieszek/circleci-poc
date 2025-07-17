@@ -7,6 +7,8 @@ orbs:
 
 workflows:
   setup:
+    when:
+      - equal: [push, << pipeline.event.name >>]
     jobs:
       - determine-workflow
 
