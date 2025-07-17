@@ -7,12 +7,13 @@ echo "Branch: $CIRCLE_BRANCH"
 BRANCH_NAME="$CIRCLE_BRANCH"
 
 if [[ "$BRANCH_NAME" == "prod" ]]; then
-    echo 'export WORKFLOW_FILE=.circleci/workflows/prod.yml' >>$BASH_ENV
+    export WORKFLOW_FILE=.circleci/workflows/prod.yml
 elif [[ "$BRANCH_NAME" == "develop" ]]; then
-    echo 'export WORKFLOW_FILE=.circleci/workflows/dev.yml' >>$BASH_ENV
+    export WORKFLOW_FILE=.circleci/workflows/dev.yml
 elif [[ "$BRANCH_NAME" =~ ^feat\/(.+)$ ]]; then
     ENV_NAME="${BASH_REMATCH[1]}"
     echo "export ENV_NAME=$ENV_NAME" >>$BASH_ENV
+    export WORKFLOW_FILE=.circleci/workflows/dev.yml
 else
     echo "No workflow defined for branch: $BRANCH_NAME"
     exit 0
