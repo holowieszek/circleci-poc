@@ -12,11 +12,10 @@ elif [[ "$BRANCH_NAME" == "develop" ]]; then
     echo 'export WORKFLOW_FILE=.circleci/workflows/dev.yml' >>$BASH_ENV
 elif [[ "$BRANCH_NAME" =~ ^feat\/(.+)$ ]]; then
     ENV_NAME="${BASH_REMATCH[1]}"
-    echo "Extracted environment: $ENV_NAME"
-
-    echo 'export WORKFLOW_FILE=.circleci/workflows/dev.yml' >>$BASH_ENV
     echo "export ENV_NAME=$ENV_NAME" >>$BASH_ENV
 else
     echo "No workflow defined for branch: $BRANCH_NAME"
     exit 0
 fi
+
+cp $WORKFLOW_FILE .circleci/workflows/selected_workflow.yml
