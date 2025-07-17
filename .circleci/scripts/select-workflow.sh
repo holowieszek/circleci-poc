@@ -2,7 +2,7 @@
 
 set -e
 
-echo ${<< pipeline.event.github.pull_request.head.ref >>}
+#echo ${<< pipeline.event.github.pull_request.head.ref >>}
 echo "Branch: $CIRCLE_BRANCH"
 
 BRANCH_NAME="$CIRCLE_BRANCH"
