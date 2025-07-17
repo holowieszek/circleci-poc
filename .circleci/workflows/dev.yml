@@ -27,6 +27,7 @@ install_gcp: &install_gcp
   gcp-cli/setup:
     version: 404.0.0
     gcloud_service_key: DEV_GCLOUD_SERVICE_KEY
+    google_project_id: DEV_GCLOUD_PROJECT_ID
 
 configure_gcp: &configure_gcp
   name: Configure gcp-cli
