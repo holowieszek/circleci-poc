@@ -15,6 +15,9 @@ jobs:
     docker:
       - image: cimg/base:stable
 
+    environment:
+      CIRCLE_PULL_REQUEST_BASE_BRANCH: << pipeline.event.github.pull_request.base.ref >>
+      CIRCLE_PULL_REQUEST_HEAD_BRANCH: << pipeline.event.github.pull_request.head.ref >>
     steps:
       - checkout
       - run:
