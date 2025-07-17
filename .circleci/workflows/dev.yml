@@ -29,12 +29,6 @@ install_gcp: &install_gcp
     gcloud_service_key: DEV_GCLOUD_SERVICE_KEY
     google_project_id: DEV_GCLOUD_PROJECT_ID
 
-configure_gcp: &configure_gcp
-  name: Configure gcp-cli
-  command: |
-    echo $DEV_GCLOUD_SERVICE_KEY > ${HOME}/gcloud-service-key.json
-    echo 'export GOOGLE_APPLICATION_CREDENTIALS=${HOME}/gcloud-service-key.json' >> $BASH_ENV
-
 jobs:
   setup:
     <<: *defaults
@@ -56,8 +50,6 @@ jobs:
           at: /home/circleci
       - run:
           <<: *install_tofu
-      #- run:
-      #    <<: *configure_gcp
       - <<: *install_gcp
       - run:
           command: gcloud --version
