@@ -36,14 +36,18 @@ jobs:
     steps:
       - attach_workspace:
           at: /home/circleci
-      - run: echo "build"
+      - run: |
+          tofu --version
+          echo "build"
 
   test:
     <<: *defaults
     steps:
       - attach_workspace:
           at: /home/circleci
-      - run: echo "test"
+      - run: |
+          tofu --version
+          echo "test"
 
 workflows:
   dev-workflow:
@@ -54,5 +58,4 @@ workflows:
             - setup
       - test:
           requires:
-            - setup
             - build
