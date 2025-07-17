@@ -26,6 +26,7 @@ install_tofu: &install_tofu
 install_gcp: &install_gcp
   gcp-cli/setup:
     version: 404.0.0
+    gcloud_service_key: $DEV_GCLOUD_SERVICE_KEY
 
 configure_gcp: &configure_gcp
   name: Configure gcp-cli
@@ -54,8 +55,8 @@ jobs:
           at: /home/circleci
       - run:
           <<: *install_tofu
-      - run:
-          <<: *configure_gcp
+      #- run:
+      #    <<: *configure_gcp
       - <<: *install_gcp
       - run:
           command: gcloud --version
