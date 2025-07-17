@@ -19,7 +19,7 @@ jobs:
       - checkout
       - run:
           name: Determine workflow based on branch
-          command: .circleci/scripts/select-workflow.sh << pipeline.event.github.pull_request.base.ref >>
+          command: .circleci/scripts/select-workflow.sh << pipeline.event.github.pull_request.base.ref >><< pipeline.event.name >>
       - run:
           name: printenv
           command: printenv
