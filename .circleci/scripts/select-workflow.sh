@@ -1,6 +1,11 @@
 #!/bin/bash
 
 set -e
+BASE_BRANCH="$1"
+HEAD_BRANCH="$2"
+
+echo $BASE_BRANCH
+echo $HEAD_BRANCH
 
 echo "Branch: $CIRCLE_BRANCH"
 

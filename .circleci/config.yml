@@ -8,21 +8,29 @@ orbs:
 workflows:
   setup:
     jobs:
-      - determine-workflow
+      - determine-workflow:
+          base_branch: << pipeline.parameters.base_branch >>
+          head_branch: << pipeline.parameters.head_branch >>
+
+parameters:
+  base_branch:
+    type: string
+    default: ""
+  head_branch:
+    type: string
+    default: ""
 
 jobs:
   determine-workflow:
     docker:
       - image: cimg/base:stable
 
-    environment:
-      CIRCLE_PULL_REQUEST_BASE_BRANCH: << pipeline.event.github.pull_request.base.ref >> || "null"
-      CIRCLE_PULL_REQUEST_HEAD_BRANCH: << pipeline.event.github.pull_request.head.ref >> || "null"
     steps:
       - checkout
       - run:
           name: Determine workflow based on branch
-          command: .circleci/scripts/select-workflow.sh
+          command: .circleci/scripts/select-workflow.sh "<< parameters.base_branch >>" "<< parameters.head_branch >>"
+
       - run:
           name: printenv
           command: printenv
