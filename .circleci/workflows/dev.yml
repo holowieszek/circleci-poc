@@ -38,8 +38,10 @@ jobs:
     steps:
       - attach_workspace:
           at: /home/circleci
+      - run:
+          <<: *install_tofu
       - run: |
-          /usr/local/bin/tofu --version
+          tofu --version
           echo "build"
 
   test:
@@ -47,6 +49,8 @@ jobs:
     steps:
       - attach_workspace:
           at: /home/circleci
+      - run:
+          <<: *install_tofu
       - run: |
           tofu --version
           echo "test"
