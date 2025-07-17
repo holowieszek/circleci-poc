@@ -37,7 +37,7 @@ jobs:
           paths:
             - project
 
-  build:
+  init:
     <<: *defaults
     steps:
       - attach_workspace:
@@ -47,28 +47,36 @@ jobs:
       - <<: *install_gcp
       - run:
           command: gcloud --version
-      - run: |
-          tofu --version
-          echo "build"
+      - run: tofu init
 
-  test:
+  plan:
     <<: *defaults
     steps:
       - attach_workspace:
           at: /home/circleci
       - run:
           <<: *install_tofu
-      - run: |
-          tofu --version
-          echo "test"
+      - run: tofu plan
+
+  apply:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: /home/circleci
+      - run:
+          <<: *install_tofu
+      - run: tofu apply
 
 workflows:
   dev-workflow:
     jobs:
       - setup
-      - build:
+      - init:
           requires:
             - setup
-      - test:
+      - plan:
           requires:
-            - build
+            - init
+      - apply:
+          requires:
+            - plan
