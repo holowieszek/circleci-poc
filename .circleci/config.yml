@@ -19,4 +19,4 @@ jobs:
       - checkout
       - run:
           name: Determine workflow based on branch
-          command: ./circleci/scripts/select-workflow.sh
+          command: .circleci/scripts/select-workflow.sh
