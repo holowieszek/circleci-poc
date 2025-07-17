@@ -22,6 +22,10 @@ install_tofu: &install_tofu
     rm -rf tofu.zip
     tofu --version
 
+install_gcp: &install_gcp
+  gcp-cli/setup:
+    version: 404.0.0
+
 jobs:
   setup:
     <<: *defaults
@@ -43,6 +47,7 @@ jobs:
           at: /home/circleci
       - run:
           <<: *install_tofu
+      - <<: *install_gcp
       - run:
           command: gcloud --version
       - run: |
