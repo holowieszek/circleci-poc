@@ -49,7 +49,11 @@ jobs:
 workflows:
   dev-workflow:
     jobs:
-      - build
+      - setup
+      - build:
+          requires:
+            - setup
       - test:
           requires:
+            - setup
             - build
