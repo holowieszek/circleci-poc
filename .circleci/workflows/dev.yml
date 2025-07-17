@@ -19,6 +19,6 @@ workflows:
   dev-workflow:
     jobs:
       - build
-      - deploy-dev:
+      - test:
           requires:
             - build
