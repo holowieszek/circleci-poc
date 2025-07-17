@@ -15,15 +15,11 @@ jobs:
     docker:
       - image: cimg/base:stable
 
-    environment:
-      CIRCLE_PULL_REQUEST_BASE_BRANCH: <<^pipeline.event.github.pull_request.base.ref >>NO_PR<</pipeline.event.github.pull_request.base.ref>>
-      CIRCLE_PULL_REQUEST_HEAD_BRANCH: <<^pipeline.event.github.pull_request.head.ref >>NO_PR<</pipeline.event.github.pull_request.head.ref>>
-
     steps:
       - checkout
       - run:
           name: Determine workflow based on branch
-          command: .circleci/scripts/select-workflow.sh
+          command: .circleci/scripts/select-workflow.sh << pipeline.event.github.pull_request.base.ref >>
       - run:
           name: printenv
           command: printenv
