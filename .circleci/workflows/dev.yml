@@ -20,15 +20,29 @@ install_tofu: &install_tofu
     tofu --version
 
 jobs:
+  setup:
+    <<: *defaults
+    steps:
+      - run:
+          <<: *install_tofu
+      - persist_to_workspace:
+          root: /home/circleci
+          paths:
+            - project
+
   build:
     <<: *defaults
     steps:
+      - attach_workspace:
+          at: /home/circleci
       - checkout
       - run: echo "build"
 
   test:
     <<: *defaults
     steps:
+      - attach_workspace:
+          at: /home/circleci
       - checkout
       - run: echo "test"
 
