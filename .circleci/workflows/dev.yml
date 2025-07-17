@@ -15,7 +15,7 @@ defaults: &defaults
 
 install_tofu: &install_tofu
   name: Install OpenTofu
-  command: chmod +x .circleci/scripts/install-tofu.sh
+  command: .circleci/scripts/install-tofu.sh
 
 install_gcp: &install_gcp
   gcp-cli/setup:
