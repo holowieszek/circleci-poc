@@ -23,6 +23,7 @@ jobs:
   setup:
     <<: *defaults
     steps:
+      - checkout
       - run:
           <<: *install_tofu
       - persist_to_workspace:
@@ -35,7 +36,6 @@ jobs:
     steps:
       - attach_workspace:
           at: /home/circleci
-      - checkout
       - run: echo "build"
 
   test:
@@ -43,7 +43,6 @@ jobs:
     steps:
       - attach_workspace:
           at: /home/circleci
-      - checkout
       - run: echo "test"
 
 workflows:
