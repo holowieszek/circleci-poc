@@ -57,6 +57,8 @@ jobs:
       - run:
           command: gcloud --version
       - run: |
+          ls &&
+          export GOOGLE_APPLICATION_CREDENTIALS=service-account-key.json &&
           gcloud auth application-default print-access-token
           #tofu init \
           #  --backend-config=config/backend/dev.tfbackend \
