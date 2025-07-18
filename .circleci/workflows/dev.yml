@@ -28,7 +28,7 @@ configure_gcp: &configure_gcp
   command: |
     echo "$DEV_GCLOUD_SERVICE_KEY" > service-account-key.json
     export GOOGLE_APPLICATION_CREDENTIALS=service-account-key.json
-
+    gcloud auth activate-service-account --key-file $GOOGLE_APPLICATION_CREDENTIALS
 jobs:
   setup:
     <<: *defaults
@@ -53,7 +53,7 @@ jobs:
       - <<: *install_gcp
       - run:
           <<: *configure_gcp
-      - run: gcloud auth activate-service-account --key-file service-account-key.json
+      #- run: gcloud auth activate-service-account --key-file service-account-key.json
       - run:
           command: gcloud --version
       - run: |
