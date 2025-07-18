@@ -28,7 +28,17 @@ configure_gcp: &configure_gcp
   command: |
     echo "$DEV_GCLOUD_SERVICE_KEY" > service-account-key.json
     echo "export GOOGLE_APPLICATION_CREDENTIALS=service-account-key.json" >> $BASH_ENV
-    #gcloud auth activate-service-account --key-file $GOOGLE_APPLICATION_CREDENTIALS
+
+persist: &persist
+  persist_to_workspace:
+    root: .
+    paths:
+      - .
+
+attach: &attach
+  attach_workspace:
+    at: .
+
 jobs:
   setup:
     <<: *defaults
@@ -38,16 +48,12 @@ jobs:
           <<: *install_tofu
       - run:
           command: tofu --version
-      - persist_to_workspace:
-          root: /home/circleci
-          paths:
-            - project
+      - *persist
 
   init:
     <<: *defaults
     steps:
-      - attach_workspace:
-          at: /home/circleci
+      - *attach
       - run:
           <<: *install_tofu
       - <<: *install_gcp
@@ -56,16 +62,15 @@ jobs:
       - run:
           command: gcloud --version
       - run: |
-          #export GOOGLE_APPLICATION_CREDENTIALS=service-account-key.json &&
           tofu init \
             --backend-config=config/backend/dev.tfbackend \
             --backend-config="bucket=$DEV_GCP_TERRAFORM_STATE_BUCKET"
+      - *persist
 
   plan:
     <<: *defaults
     steps:
-      - attach_workspace:
-          at: /home/circleci
+      - *attach
       - run:
           <<: *install_tofu
       - <<: *install_gcp
@@ -82,8 +87,7 @@ jobs:
   apply:
     <<: *defaults
     steps:
-      - attach_workspace:
-          at: /home/circleci
+      - *attach
       - run:
           <<: *install_tofu
       - run: tofu apply tofuplan
