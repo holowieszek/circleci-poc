@@ -52,7 +52,7 @@ jobs:
     <<: *defaults
     steps:
       - *attach
-      - *install_gcp
+      #- *install_gcp
       - run: *install_tofu
       - run: *configure_gcp
       - run: |
@@ -65,7 +65,7 @@ jobs:
     <<: *defaults
     steps:
       - *attach
-      - *install_gcp
+      #- *install_gcp
       - run: *install_tofu
       - run: *configure_gcp
       - run: |
@@ -81,7 +81,7 @@ jobs:
     <<: *defaults
     steps:
       - *attach
-      - *install_gcp
+      #- *install_gcp
       - run: *install_tofu
       - run: *configure_gcp
       - run: tofu apply tofuplan
