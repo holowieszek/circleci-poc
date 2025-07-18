@@ -17,7 +17,7 @@ install_tofu: &install_tofu
   name: Install OpenTofu
   command: |
     .circleci/scripts/install-tofu.sh
-    sudo cp $(which tofu) tofu
+    cp $(which tofu) tofu
 
 #install_gcp: &install_gcp
 #  gcp-cli/setup:
@@ -46,7 +46,6 @@ restore_cache: &restore_cache
   name: Restore cache
   command: |
     sudo cp tofu /usr/local/bin/tofu
-    chmod +x /usr/local/bin/tofu
 
     cat new-env-vars >> $BASH_ENV
 
