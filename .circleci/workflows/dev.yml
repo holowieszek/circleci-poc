@@ -53,7 +53,7 @@ jobs:
       - <<: *install_gcp
       - run:
           <<: *configure_gcp
-      - run: gcloud auth application-default login
+      - run: gcloud auth activate-service-account --key-file service-account-key.json
       - run:
           command: gcloud --version
       - run: |
