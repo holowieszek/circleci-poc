@@ -47,7 +47,10 @@ jobs:
       - <<: *install_gcp
       - run:
           command: gcloud --version
-      - run: tofu init
+      - run: |
+          tofu init \
+            --backend-config=config/backend/dev.tfbackend /
+            --backend-config="bucket=$DEV_GCP_TERRAFORM_STATE_BUCKET"
 
   plan:
     <<: *defaults
@@ -56,7 +59,13 @@ jobs:
           at: /home/circleci
       - run:
           <<: *install_tofu
-      - run: tofu plan
+      - run: |
+          tofu plan \
+            -var-file=config/environment/dev.tfvars \
+            -var="project_id=$DEV_GCLOUD_PROJECT_ID" \
+            -var="region=$DEV_GCLOUD_REGION" \
+            -var="zone=$DEV_GCLOUD_ZONE" \
+            -out=tofuplan
 
   apply:
     <<: *defaults
@@ -65,7 +74,7 @@ jobs:
           at: /home/circleci
       - run:
           <<: *install_tofu
-      - run: tofu apply
+      - run: tofu apply tofuplan
 
 workflows:
   dev-workflow:
