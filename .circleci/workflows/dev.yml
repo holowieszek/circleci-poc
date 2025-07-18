@@ -57,9 +57,7 @@ restore_cache: &restore_cache
     # Restore custom env variables from cache
     cat new-env-vars >> $BASH_ENV
 
-    echo $GCLOUD_ZONE
-    echo $FEATURE_ENV
-    printenv
+    cat $BASH_ENV
 
 tofu_init: &tofu_init
   name: Tofu Init
