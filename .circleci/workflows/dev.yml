@@ -51,7 +51,8 @@ jobs:
       - run:
           <<: *install_tofu
       - <<: *install_gcp
-      - <<: *configure_gcp
+      - run:
+          <<: *configure_gcp
       - run:
           command: gcloud --version
       - run: |
