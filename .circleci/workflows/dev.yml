@@ -49,7 +49,7 @@ jobs:
           command: gcloud --version
       - run: |
           tofu init \
-            --backend-config=config/backend/dev.tfbackend /
+            --backend-config=config/backend/dev.tfbackend \
             --backend-config="bucket=$DEV_GCP_TERRAFORM_STATE_BUCKET"
 
   plan:
