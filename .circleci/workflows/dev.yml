@@ -40,15 +40,13 @@ attach: &attach
     at: .
 
 jobs:
-  setup:
-    <<: *defaults
-    steps:
-      - checkout
-      - run:
-          <<: *install_tofu
-      - run:
-          command: tofu --version
-      - *persist
+  #setup:
+  #  <<: *defaults
+  #  steps:
+  #    - checkout
+  #    - *install_gcp
+  #    - run: *install_tofu
+  #    - *persist
 
   init:
     <<: *defaults
@@ -91,10 +89,10 @@ jobs:
 workflows:
   dev-workflow:
     jobs:
-      - setup
+      #- setup
       - init:
-          requires:
-            - setup
+        #requires:
+        #  - setup
       - plan:
           requires:
             - init
