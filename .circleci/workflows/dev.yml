@@ -108,10 +108,10 @@ jobs:
 workflows:
   dev-workflow:
     jobs:
-      #- setup
-      - init
-        #requires:
-        #  - setup
+      - setup
+      - init:
+          requires:
+            - setup
       - plan:
           requires:
             - init
