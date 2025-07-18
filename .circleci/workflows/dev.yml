@@ -29,7 +29,6 @@ configure_gcp: &configure_gcp
   name: Configure GCP
   command: |
     echo "$DEV_GCLOUD_SERVICE_KEY" > service-account-key.json
-    echo "export GOOGLE_APPLICATION_CREDENTIALS=service-account-key.json" >> $BASH_ENV
     echo "export GOOGLE_APPLICATION_CREDENTIALS=service-account-key.json" >> new-env-vars
 
 persist: &persist
@@ -45,18 +44,13 @@ attach: &attach
 restore_cache: &restore_cache
   name: Restore cache
   command: |
+    # Restore Tofu from cache
     sudo cp tofu /usr/local/bin/tofu
 
+    # Restore custom env variables from cache
     cat new-env-vars >> $BASH_ENV
 
 jobs:
-  #setup:
-  #  <<: *defaults
-  #  steps:
-  #    - checkout
-  #    - *install_gcp
-  #    - run: *install_tofu
-  #    - *persist
   setup:
     <<: *defaults
     steps:
@@ -69,8 +63,6 @@ jobs:
     <<: *defaults
     steps:
       - *attach
-      - run:
-          command: ls
       - run: *restore_cache
       - run: |
           tofu init \
@@ -82,9 +74,7 @@ jobs:
     <<: *defaults
     steps:
       - *attach
-      #- *install_gcp
-      - run: *install_tofu
-      - run: *configure_gcp
+      - run: *restore_cache
       - run: |
           tofu plan \
             -var-file=config/environment/dev.tfvars \
@@ -98,9 +88,7 @@ jobs:
     <<: *defaults
     steps:
       - *attach
-      #- *install_gcp
-      - run: *install_tofu
-      - run: *configure_gcp
+      - run: *restore_cache
       - run: tofu apply tofuplan
 
 workflows:
