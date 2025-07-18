@@ -57,9 +57,10 @@ jobs:
       - run:
           command: gcloud --version
       - run: |
-          tofu init \
-            --backend-config=config/backend/dev.tfbackend \
-            --backend-config="bucket=$DEV_GCP_TERRAFORM_STATE_BUCKET"
+          gcloud auth application-default print-access-token
+          #tofu init \
+          #  --backend-config=config/backend/dev.tfbackend \
+          #  --backend-config="bucket=$DEV_GCP_TERRAFORM_STATE_BUCKET"
 
   plan:
     <<: *defaults
