@@ -51,7 +51,7 @@ jobs:
   init:
     <<: *defaults
     steps:
-      - *attach
+      - checkout
       #- *install_gcp
       - run: *install_tofu
       - run: *configure_gcp
