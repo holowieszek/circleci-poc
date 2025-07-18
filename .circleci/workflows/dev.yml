@@ -7,11 +7,6 @@ env: &env
   environment:
     TOFU_VERSION: 1.8.0
     ENVIRONMENT_NAME: dev
-    TERRAFORM_STATE_GCLOUD_STORAGE_BUCKET: $DEV_GCP_TERRAFORM_STATE_BUCKET
-    GCLOUD_PROJECT_ID: $DEV_GCLOUD_PROJECT_ID
-    GCLOUD_REGION: $DEV_GCLOUD_REGION
-    GCLOUD_ZONE: $DEV_GCLOUD_ZONE
-    GCLOUD_SERVICE_KEY: ${DEV_GCLOUD_SERVICE_KEY}
 
 defaults: &defaults
   docker:
@@ -34,7 +29,6 @@ configure_gcp: &configure_gcp
 set_vars: &set_vars
   name: Set vars
   command: |
-    echo "export ENVIRONMENT_NAME=dev" >> new-env-vars
     echo "export TERRAFORM_STATE_GCLOUD_STORAGE_BUCKET=${DEV_GCP_TERRAFORM_STATE_BUCKET}" >> new-env-vars
     echo "export GCLOUD_PROJECT_ID=${DEV_GCLOUD_PROJECT_ID}" >> new-env-vars
     echo "export GCLOUD_REGION=${DEV_GCLOUD_REGION}" >> new-env-vars
