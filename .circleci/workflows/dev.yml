@@ -27,7 +27,7 @@ configure_gcp: &configure_gcp
   name: Configure GCP
   command: |
     echo "$DEV_GCLOUD_SERVICE_KEY" > service-account-key.json
-    export GOOGLE_APPLICATION_CREDENTIALS=service-account-key.json
+    echo "export GOOGLE_APPLICATION_CREDENTIALS=service-account-key.json" >> $BASH_ENV
     gcloud auth activate-service-account --key-file $GOOGLE_APPLICATION_CREDENTIALS
 jobs:
   setup:
