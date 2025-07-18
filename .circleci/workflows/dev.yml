@@ -14,9 +14,8 @@ defaults: &defaults
   <<: *env
 
 install_tofu: &install_tofu
-  run:
-    name: Install OpenTofu
-    command: .circleci/scripts/install-tofu.sh
+  name: Install OpenTofu
+  command: .circleci/scripts/install-tofu.sh
 
 install_gcp: &install_gcp
   gcp-cli/setup:
@@ -25,11 +24,10 @@ install_gcp: &install_gcp
     google_project_id: DEV_GCLOUD_PROJECT_ID
 
 configure_gcp: &configure_gcp
-  run:
-    name: Configure GCP
-    command: |
-      echo "$DEV_GCLOUD_SERVICE_KEY" > service-account-key.json
-      echo "export GOOGLE_APPLICATION_CREDENTIALS=service-account-key.json" >> $BASH_ENV
+  name: Configure GCP
+  command: |
+    echo "$DEV_GCLOUD_SERVICE_KEY" > service-account-key.json
+    echo "export GOOGLE_APPLICATION_CREDENTIALS=service-account-key.json" >> $BASH_ENV
 
 persist: &persist
   persist_to_workspace:
