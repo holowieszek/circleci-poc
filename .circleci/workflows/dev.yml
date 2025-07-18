@@ -1,24 +1,91 @@
 version: 2.1
 
-jobs:
-  build:
-    docker:
-      - image: cimg/base:2023.03
-    steps:
-      - checkout
-      - run: echo "build"
+orbs:
+  gcp-cli: circleci/gcp-cli@3.3.1
 
-  test:
-    docker:
-      - image: cimg/base:2023.03
+env: &env
+  environment:
+    TOFU_VERSION: 1.8.0
+
+defaults: &defaults
+  docker:
+    - image: cimg/base:2023.03
+  resource_class: small
+  <<: *env
+
+install_tofu: &install_tofu
+  name: Install OpenTofu
+  command: .circleci/scripts/install-tofu.sh
+
+install_gcp: &install_gcp
+  gcp-cli/setup:
+    version: 404.0.0
+    gcloud_service_key: DEV_GCLOUD_SERVICE_KEY
+    google_project_id: DEV_GCLOUD_PROJECT_ID
+
+jobs:
+  setup:
+    <<: *defaults
     steps:
       - checkout
-      - run: echo "test"
+      - run:
+          <<: *install_tofu
+      - run:
+          command: tofu --version
+      - persist_to_workspace:
+          root: /home/circleci
+          paths:
+            - project
+
+  init:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: /home/circleci
+      - run:
+          <<: *install_tofu
+      - <<: *install_gcp
+      - run:
+          command: gcloud --version
+      - run: |
+          tofu init \
+            --backend-config=config/backend/dev.tfbackend /
+            --backend-config="bucket=$DEV_GCP_TERRAFORM_STATE_BUCKET"
+
+  plan:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: /home/circleci
+      - run:
+          <<: *install_tofu
+      - run: |
+          tofu plan \
+            -var-file=config/environment/dev.tfvars \
+            -var="project_id=$DEV_GCLOUD_PROJECT_ID" \
+            -var="region=$DEV_GCLOUD_REGION" \
+            -var="zone=$DEV_GCLOUD_ZONE" \
+            -out=tofuplan
+
+  apply:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: /home/circleci
+      - run:
+          <<: *install_tofu
+      - run: tofu apply tofuplan
 
 workflows:
   dev-workflow:
     jobs:
-      - build
-      - deploy-dev:
+      - setup
+      - init:
           requires:
-            - build
+            - setup
+      - plan:
+          requires:
+            - init
+      - apply:
+          requires:
+            - plan

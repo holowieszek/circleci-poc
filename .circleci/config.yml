@@ -20,5 +20,8 @@ jobs:
       - run:
           name: Determine workflow based on branch
           command: .circleci/scripts/select-workflow.sh
+      - run:
+          name: printenv
+          command: printenv
       - continuation/continue:
-          configuration_path: "$WORKFLOW_PATH"
+          configuration_path: .circleci/workflows/selected_workflow.yml
