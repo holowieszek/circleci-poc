@@ -54,13 +54,13 @@ jobs:
     <<: *defaults
     steps:
       - *attach
-      - run:
-          <<: *install_tofu
-      - <<: *install_gcp
-      - run:
-          <<: *configure_gcp
-      - run:
-          command: gcloud --version
+      - *install_tofu
+      - *configure_gcp
+      #- run:
+      #    <<: *install_tofu
+      #- <<: *install_gcp
+      #- run:
+      #    <<: *configure_gcp
       - run: |
           tofu init \
             --backend-config=config/backend/dev.tfbackend \
@@ -83,6 +83,7 @@ jobs:
             -var="region=$DEV_GCLOUD_REGION" \
             -var="zone=$DEV_GCLOUD_ZONE" \
             -out=tofuplan
+      - *persist
 
   apply:
     <<: *defaults
