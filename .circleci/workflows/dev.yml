@@ -51,15 +51,11 @@ attach: &attach
 restore_cache: &restore_cache
   name: Restore cache
   command: |
-    echo $FEATURE_ENV
-    cat $BASH_ENV
     # Restore Tofu from cache
     sudo cp tofu /usr/local/bin/tofu
 
     # Restore custom env variables from cache
     cat new-env-vars >> $BASH_ENV
-
-    cat $BASH_ENV
 
 tofu_init: &tofu_init
   name: Tofu Init
