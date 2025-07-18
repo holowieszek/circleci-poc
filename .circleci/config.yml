@@ -25,3 +25,7 @@ jobs:
           command: printenv
       - continuation/continue:
           configuration_path: .circleci/workflows/selected_workflow.yml
+          pre-steps:
+            - run:
+                command: |
+                  echo $FEATURE_ENV
