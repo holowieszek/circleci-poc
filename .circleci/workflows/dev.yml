@@ -55,12 +55,8 @@ jobs:
     steps:
       - *attach
       - run: *install_tofu
+      - run: *install_gcp
       - run: *configure_gcp
-      #- run:
-      #    <<: *install_tofu
-      #- <<: *install_gcp
-      #- run:
-      #    <<: *configure_gcp
       - run: |
           tofu init \
             --backend-config=config/backend/dev.tfbackend \
@@ -71,11 +67,9 @@ jobs:
     <<: *defaults
     steps:
       - *attach
-      - run:
-          <<: *install_tofu
-      - <<: *install_gcp
-      - run:
-          <<: *configure_gcp
+      - run: *install_tofu
+      - run: *install_gcp
+      - run: *configure_gcp
       - run: |
           tofu plan \
             -var-file=config/environment/dev.tfvars \
@@ -89,8 +83,9 @@ jobs:
     <<: *defaults
     steps:
       - *attach
-      - run:
-          <<: *install_tofu
+      - run: *install_tofu
+      - run: *install_gcp
+      - run: *configure_gcp
       - run: tofu apply tofuplan
 
 workflows:
