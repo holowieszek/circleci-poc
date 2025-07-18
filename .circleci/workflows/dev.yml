@@ -17,8 +17,7 @@ install_tofu: &install_tofu
   name: Install OpenTofu
   command: |
     .circleci/scripts/install-tofu.sh
-    mkdir -p /tmp
-    cp $(which tofu) /tmp
+    cp $(which tofu) tofu
 
 #install_gcp: &install_gcp
 #  gcp-cli/setup:
@@ -31,7 +30,7 @@ configure_gcp: &configure_gcp
   command: |
     echo "$DEV_GCLOUD_SERVICE_KEY" > service-account-key.json
     echo "export GOOGLE_APPLICATION_CREDENTIALS=service-account-key.json" >> $BASH_ENV
-    echo "export GOOGLE_APPLICATION_CREDENTIALS=service-account-key.json" >> /tmp/new-env-vars
+    echo "export GOOGLE_APPLICATION_CREDENTIALS=service-account-key.json" >> new-env-vars
 
 persist: &persist
   persist_to_workspace:
@@ -46,10 +45,10 @@ attach: &attach
 restore_cache: &restore_cache
   name: Restore cache
   command: |
-    sudo cp /tmp/tofu /usr/local/bin/tofu
+    sudo cp tofu /usr/local/bin/tofu
     chmod +x /usr/local/bin/tofu
 
-    cat /tmp/service-account-key.json >> $BASH_ENV
+    cat new-env-vars >> $BASH_ENV
 
 jobs:
   #setup:
