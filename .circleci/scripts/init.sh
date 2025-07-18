@@ -1,4 +1,5 @@
 #!/bin/bash
+set -x
 
 tofu init \
     --backend-config=config/backend/$ENVIRONMENT_NAME.tfbackend \
