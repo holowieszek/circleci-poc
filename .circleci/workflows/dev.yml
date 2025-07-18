@@ -53,6 +53,7 @@ jobs:
       - <<: *install_gcp
       - run:
           <<: *configure_gcp
+      - run: gcloud auth application-default login
       - run:
           command: gcloud --version
       - run: |
