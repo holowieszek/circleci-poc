@@ -17,7 +17,7 @@ install_tofu: &install_tofu
   name: Install OpenTofu
   command: |
     .circleci/scripts/install-tofu.sh
-    cp $(which tofu) tofu
+    sudo cp $(which tofu) tofu
 
 #install_gcp: &install_gcp
 #  gcp-cli/setup:
