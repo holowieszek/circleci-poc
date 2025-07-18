@@ -15,19 +15,23 @@ defaults: &defaults
 
 install_tofu: &install_tofu
   name: Install OpenTofu
-  command: .circleci/scripts/install-tofu.sh
+  command: |
+    .circleci/scripts/install-tofu.sh
+    mkdir -p /tmp
+    cp $(which tofu) /tmp
 
-install_gcp: &install_gcp
-  gcp-cli/setup:
-    version: 404.0.0
-    gcloud_service_key: DEV_GCLOUD_SERVICE_KEY
-    google_project_id: DEV_GCLOUD_PROJECT_ID
+#install_gcp: &install_gcp
+#  gcp-cli/setup:
+#    version: 404.0.0
+#    gcloud_service_key: DEV_GCLOUD_SERVICE_KEY
+#    google_project_id: DEV_GCLOUD_PROJECT_ID
 
 configure_gcp: &configure_gcp
   name: Configure GCP
   command: |
     echo "$DEV_GCLOUD_SERVICE_KEY" > service-account-key.json
     echo "export GOOGLE_APPLICATION_CREDENTIALS=service-account-key.json" >> $BASH_ENV
+    echo "export GOOGLE_APPLICATION_CREDENTIALS=service-account-key.json" >> /tmp/new-env-vars
 
 persist: &persist
   persist_to_workspace:
@@ -39,6 +43,14 @@ attach: &attach
   attach_workspace:
     at: .
 
+restore_cache:
+  name: Restore cache
+  command: |
+    sudo cp /tmp/tofu /usr/local/bin/tofu
+    chmod +x /usr/local/bin/tofu
+
+    cat /tmp/service-account-key.json >> $BASH_ENV
+
 jobs:
   #setup:
   #  <<: *defaults
@@ -47,14 +59,18 @@ jobs:
   #    - *install_gcp
   #    - run: *install_tofu
   #    - *persist
+  setup:
+    <<: *defaults
+    steps:
+      - checkout
+      - run: *install_tofu
+      - run: *configure_gcp
+      - *persist
 
   init:
     <<: *defaults
     steps:
-      - checkout
-      #- *install_gcp
-      - run: *install_tofu
-      - run: *configure_gcp
+      - run: *restore_cache
       - run: |
           tofu init \
             --backend-config=config/backend/dev.tfbackend \
