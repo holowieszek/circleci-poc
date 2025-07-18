@@ -6,6 +6,12 @@ orbs:
 env: &env
   environment:
     TOFU_VERSION: 1.8.0
+    ENVIRONMENT_NAME: dev
+    TERRAFORM_STATE_GCLOUD_STORAGE_BUCKET: $DEV_GCP_TERRAFORM_STATE_BUCKET
+    GCLOUD_PROJECT_ID: $DEV_GCLOUD_PROJECT_ID
+    GCLOUD_REGION: $DEV_GCLOUD_REGION
+    GCLOUD_ZONE: $DEV_GCLOUD_ZONE
+    GCLOUD_SERVICE_KEY: $DEV_GCLOUD_SERVICE_KEY
 
 defaults: &defaults
   docker:
@@ -19,16 +25,10 @@ install_tofu: &install_tofu
     .circleci/scripts/install-tofu.sh
     cp $(which tofu) tofu
 
-#install_gcp: &install_gcp
-#  gcp-cli/setup:
-#    version: 404.0.0
-#    gcloud_service_key: DEV_GCLOUD_SERVICE_KEY
-#    google_project_id: DEV_GCLOUD_PROJECT_ID
-
 configure_gcp: &configure_gcp
   name: Configure GCP
   command: |
-    echo "$DEV_GCLOUD_SERVICE_KEY" > service-account-key.json
+    echo "$GCLOUD_SERVICE_KEY" > service-account-key.json
     echo "export GOOGLE_APPLICATION_CREDENTIALS=service-account-key.json" >> new-env-vars
 
 persist: &persist
@@ -50,6 +50,10 @@ restore_cache: &restore_cache
     # Restore custom env variables from cache
     cat new-env-vars >> $BASH_ENV
 
+tofu_init:
+  name: Tofu Init
+  command: .circleci/scripts/init.sh
+
 jobs:
   setup:
     <<: *defaults
@@ -64,10 +68,7 @@ jobs:
     steps:
       - *attach
       - run: *restore_cache
-      - run: |
-          tofu init \
-            --backend-config=config/backend/dev.tfbackend \
-            --backend-config="bucket=$DEV_GCP_TERRAFORM_STATE_BUCKET"
+      - run: *tofu_init
       - *persist
 
   plan:
