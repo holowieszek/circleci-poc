@@ -71,6 +71,8 @@ jobs:
     <<: *defaults
     steps:
       - *attach
+      - run:
+          command: ls
       - run: *restore_cache
       - run: |
           tofu init \
